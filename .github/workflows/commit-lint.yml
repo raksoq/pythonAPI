@@ -1,0 +1,31 @@
+name: Commit Lint
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository with more history
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history so that commit ranges are available
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Install Commitlint
+      - name: Install Commitlint
+        run: npm install @commitlint/{cli,config-conventional}
+
+      # Run Commitlint to check commit messages
+      - name: Run Commitlint
+        run: npx commitlint --from=origin/main
